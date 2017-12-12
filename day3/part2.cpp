@@ -5,35 +5,35 @@
 
 using namespace std;
 
-intmax_t getRect(intmax_t num) {
+long long getRect(long long num) {
 
-    intmax_t last = 1;
+    long long last = 1;
 
-    intmax_t i;
-    intmax_t cnt = 1;
+    long long i;
+    long long cnt = 1;
     for (i = 1 ;; i += 2, cnt++) {
-        intmax_t max = i*i;
+        long long max = i*i;
         if (num >= last && num <= max) return cnt-1;
         last = max;
     }
 }
 
 struct Cell {
-    intmax_t number;
-    intmax_t value;
+    long long number;
+    long long value;
 
     Cell() : number(0), value(0) {};
 };
 
-intmax_t CalcValue(Cell *** array, intmax_t x, intmax_t y) {
-    intmax_t result = 0;
+long long CalcValue(Cell *** array, long long x, long long y) {
+    long long result = 0;
 
-    intmax_t a[] = {-1, 0, 1};
+    long long a[] = {-1, 0, 1};
 
     //cout << "*checking for " << x << " " << y << endl;
 
-    for (intmax_t i = 0 ; i < 3 ; i++) {
-        for (intmax_t j = 0 ; j < 3 ; j++) {
+    for (long long i = 0 ; i < 3 ; i++) {
+        for (long long j = 0 ; j < 3 ; j++) {
 
             if (i == 1 && j == 1) continue;
             //cout << "checking for " << x + a[i] << " " << y + a[j] << endl;
@@ -46,14 +46,14 @@ intmax_t CalcValue(Cell *** array, intmax_t x, intmax_t y) {
     return result;
 }
 
-void print(Cell *** array, intmax_t h) {
+void print(Cell *** array, long long h) {
     cout << endl;
-    for (intmax_t i = 0 ; i < h; i++) {
-        for (intmax_t j = 0 ; j < h ; j++) {
+    for (long long i = 0 ; i < h; i++) {
+        for (long long j = 0 ; j < h ; j++) {
             if (array[i][j]) {
-                //cout << array[i][j]->number << "-" << array[i][j]->value << "\t";
+                cout << /*array[i][j]->number << "-" << array[i][j]->value*/ "X" << " ";
             } else {
-                //cout << "null" << "\t";
+                cout << "O" << " ";
             }
         }
         cout << endl;
@@ -74,26 +74,26 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    intmax_t rect = getRect(number);
-    intmax_t h = rect * 2 + 1;
-    intmax_t h_padded = h +2;
+    long long rect = getRect(number);
+    long long h = rect * 2 + 1;
+    long long h_padded = h +2;
 
     Cell ***array = nullptr;
 
     array = new Cell**[h_padded];
 
-    for (intmax_t i = 0 ; i < h_padded ; i++) {
+    for (long long i = 0 ; i < h_padded ; i++) {
         array[i] = new Cell*[h_padded];
     }
 
-    for (intmax_t i = 0 ; i < h_padded; i++) {
-        for (intmax_t j = 0 ; j < h_padded ; j++) {
+    for (long long i = 0 ; i < h_padded; i++) {
+        for (long long j = 0 ; j < h_padded ; j++) {
             array[i][j] = nullptr;
         }
     }
 
-    intmax_t x = h_padded / 2;
-    intmax_t y = h_padded / 2;
+    long long x = h_padded / 2;
+    long long y = h_padded / 2;
 
     array[x][y] = new Cell();
     array[x][y]->number = 1;
@@ -115,16 +115,16 @@ int main(int argc, char* argv[])
     cout << h << " " << h_padded << endl;
     print(array, h_padded);
 
-    intmax_t counter = 4;
+    long long counter = 4;
 
-    for (intmax_t i = 1 ; i <= rect ; i++) {
-        intmax_t a = 0;
-        for (intmax_t d = 0 ; d < 4 ; d++) {
+    for (long long i = 1 ; i <= rect ; i++) {
+        long long a = 0;
+        for (long long d = 0 ; d < 4 ; d++) {
             Direction dd = static_cast<Direction>(d);
 
             bool flag = true;
 
-            for (intmax_t j = 0 ; j < i * 2 + a ; j++) {
+            for (long long j = 0 ; j < i * 2 + a ; j++) {
 
                 if (dd == Direction::RIGHT && flag) {
                     flag = false;
@@ -163,9 +163,9 @@ int main(int argc, char* argv[])
                 array[x][y] = new Cell();
                 array[x][y]->number = counter;
                 array[x][y]->value = CalcValue(array, x, y);
-//                print(array, h_padded);
+                print(array, h_padded);
 
-                if (counter == number) goto end;
+                if (array[x][y]->value > number) goto end;
                 counter++;
             }
             flag = true;
@@ -176,13 +176,13 @@ end:
     cout << array[x][y]->value << endl;
 
 
-    for (intmax_t i = 0 ; i < h_padded; i++) {
-        for (intmax_t j = 0 ; j < h_padded ; j++) {
+    for (long long i = 0 ; i < h_padded; i++) {
+        for (long long j = 0 ; j < h_padded ; j++) {
             delete array[i][j];
         }
     }
 
-    for (intmax_t i = 0 ; i < h_padded ; i++) {
+    for (long long i = 0 ; i < h_padded ; i++) {
         delete [] array[i];
     }
 
